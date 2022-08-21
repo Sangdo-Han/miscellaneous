@@ -4,7 +4,9 @@ from config_parser import get_config
 from utils.loss import LabelSmoothingLoss
 from utils.opt import get_optimizer
 from utils.scheduler import WarmUpLR, get_scheduler
-from utils.trainer import train, evaluate
+# from utils.trainer import train, evaluate
+## changed here
+from sanhan_addons.trainer import train, evaluate
 from utils.dataset import get_train_val_test_split, get_loader
 from utils.misc import seed_everything, count_params, get_model, calc_step, log
 
@@ -147,7 +149,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = ArgumentParser("Driver code.")
-    parser.add_argument("--conf", type=str, required=True, help="Path to config.yaml file.")
+    parser.add_argument("--conf", type=str, default="./sample_configs/mixup_config.yaml", required=False, help="Path to config.yaml file.")
     args = parser.parse_args()
 
     main(args)
