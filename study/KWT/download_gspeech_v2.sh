@@ -1,6 +1,6 @@
 #!/bin/bash
 
-data_dir=$1
+data_dir=./data
 curr_dir=$PWD
 
 mkdir -p $data_dir

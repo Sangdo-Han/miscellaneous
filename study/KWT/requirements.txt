@@ -6,3 +6,4 @@ pydub
 wandb
 tqdm
 einops
+torchsummary
