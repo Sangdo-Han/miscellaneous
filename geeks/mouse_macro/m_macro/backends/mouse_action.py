@@ -1,24 +1,25 @@
 import pyautogui
+import time
+import datetime
 
 class TimeRecord(object):
-    def __init__(self, coords, actions, timings):
-        """
-        Args:
-            coords : list
-                nested lists (dim 2), coordinates
-            actions : list
-                list of Natural Numbers for Number of clicks
-            timings:  list 
-                list of times (microsecond delays, default to 0.0)
-        """
-        self.schedules = zip(coords, actions, timings)
-    def setTime(self, hour, min, sec, milisec, microsec):
-        pass
+    def __init__(self):
+        self.schedules = [0, 0, 0, 0.0]
+    
+    def setTime(self, hour_min=None, sec=None, milisec=None, loop_sec=None):
+        if hour_min is None or hour_min=='':
+            hour_min = self.schedules[0]
+        if sec is None or sec=='':
+            sec = self.schedules[1]
+        if milisec is None or milisec=='':
+            milisec = self.schedules[2]
+        if loop_sec is None or loop_sec=='':
+            loop_sec = self.schedules[3]
+
+        self.schedules = [int(hour_min), int(sec), int(milisec), float(loop_sec)]
 
     def resetTime(self):
-        """
-        """
-        pass
+        self.schedules = [0, 0, 0, 0.0]
 
 class PositionalRecord(object):
     def __init__(self):
@@ -28,8 +29,29 @@ class PositionalRecord(object):
         pose_x, pose_y = pose.x, pose.y
         self.records.append([pose_x, pose_y])
     def reset(self):
-        self.record = []
+        self.records = []
 
-class MainGame(object):
-    def __init__(self, timeRec, poseRec):
-        pass
+def main_game( pose_records,
+               time_records ):
+
+    target_time, second_delay, mili_delay, loop_delay = time_records
+    second_delay = second_delay
+    mili_delay = int(mili_delay * 100000)
+    loop_flag = True
+
+    while loop_flag:
+        time.sleep(loop_delay)
+        nowtime = datetime.datetime.now()
+        if nowtime.hour==(target_time//100) and nowtime.minute >= target_time%100 and \
+                                                nowtime.second >= second_delay and \
+                                                nowtime.microsecond >= mili_delay:    
+            for x_point, y_point in pose_records:
+                pyautogui.click(x_point,y_point)
+            loop_flag = False
+        else:
+            print(nowtime, end='\r')
+
+        if nowtime.hour==(target_time//100) and nowtime.minute >= (target_time%100 +1):
+            loop_flag = False
+
+    return True

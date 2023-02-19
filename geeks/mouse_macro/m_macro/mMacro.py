@@ -1,25 +1,21 @@
 import sys
-from tkinter.tix import ButtonBox
 import PySide6
-from PySide6 import (QtCore, 
-                    QtGui)
+from PySide6 import QtCore
 from PySide6.QtGui import (QBrush, 
                           QPainter)
 from PySide6.QtWidgets import (QApplication,
                               QDialog,
-                              QWidget,
                               QDialogButtonBox,
                               QMainWindow, 
                               QPushButton, 
-                              QInputDialog,
-                              QVBoxLayout,
+                              QLabel,
                               QFormLayout,
                               QLineEdit)
-from backends.mouse_action import (TimeRecord, 
-                                PositionalRecord)
-from typing import Optional
 
-import time 
+from backends.mouse_action import (TimeRecord, 
+                                PositionalRecord,
+                                main_game)
+from typing import Optional
 
 class MainApp(QMainWindow):
     def __init__(self):
@@ -28,32 +24,31 @@ class MainApp(QMainWindow):
         self.position_recorder = PositionalRecord()
         self.current_point = None
         self.displayed_points = []
-        self.timing = []
+        self.time_recorder = TimeRecord()
+        # self.time_inputs = self.time_recorder.schedules
         self.paint_mode = False
+        self.main_game_activated = False
         self.n_paints = 0
         self.initUI()
     
     def initUI(self):
         self.setWindowTitle("Mouse-Macro v.0.1")
         self.move(0,0)
-        
-        self.controllerBtn = QPushButton("Control Box", self)
-        self.controllerBtn.setCheckable(True)
-        self.controllerBtn.move(0, 25)
+                
+        self.count_label = QLabel(self)
+        self.count_label.setText(f"Mouse Action :{self.n_paints}")
 
-        self.resetPosBtn = QPushButton("Reset Positions", self)
-        self.resetPosBtn.setCheckable(True)
+        self.controllerBtn = QPushButton("Control Box", self)
+        self.controllerBtn.setCheckable(False)
+        self.controllerBtn.move(0, 25) 
+
+        self.resetPosBtn = QPushButton("Reset Poses", self)
         self.resetPosBtn.move(0, 50)
 
         self.submitBtn = QPushButton("Submit", self)
-        self.submitBtn.setCheckable(True)
+        self.submitBtn.setCheckable(False)
         self.submitBtn.move(0, 75)
 
-        # self.layout_button = QVBoxLayout()
-        # self.layout_button.setAlignment(QtCore.Qt.AlignRight)
-        # self.layout_button.addWidget(self.resetPosBtn, alignment=QtCore.Qt.AlignRight)
-        # self.layout_button.addWidget(self.submitBtn, alignment=QtCore.Qt.AlignRight)
-        # self.setLayout(self.layout_button)
         self.setMouseTracking(True)
 
         # Display Mouse Track
@@ -67,21 +62,18 @@ class MainApp(QMainWindow):
     def popupController(self):
         dialog = ControlInputDialog(self)
         dialog.exec()
-        self.time_inputs = dialog.getInputs()
-        # controlWindow.setWindowTitle("controller")
-
-        # controlWindow.exec()
-        pass
+        self.time_recorder.setTime(*dialog.getInputs())
+        # self.time_inputs = dialog.getInputs()
 
     def mousePressEvent(self, 
                         event: PySide6.QtGui.QMouseEvent) -> None:
         if event.type() == QtCore.QEvent.MouseButtonPress:
-
             if event.button() == QtCore.Qt.RightButton:
                 self.position_recorder.record()
                 self.paint_mode = True
                 self.n_paints += 1 
                 self.update()
+                self.count_label.setText(f"Mouse Action :{self.n_paints}")
             return super().mousePressEvent(event)
 
     def paintEvent(self, 
@@ -90,13 +82,14 @@ class MainApp(QMainWindow):
             self.displayed_points.append(self.current_point)
             painter=QPainter()
             painter.begin(self)
-            displayed_x, displayed_y = self.displayed_points[-1]
+            # displayed_x, displayed_y = self.displayed_points[-1]
             x_pose, y_pose = self.position_recorder.records[-1]
             print(self.position_recorder.records)
             print(self.displayed_points)
-            brush = QBrush('red', QtCore.Qt.BrushStyle.SolidPattern)
+            brush = QBrush('green', QtCore.Qt.BrushStyle.SolidPattern)
             painter.setBrush(brush)
-            painter.drawRect(displayed_x-5,displayed_y-5, 10, 10)
+            for displayed_x, displayed_y in self.displayed_points:
+                painter.drawRect(displayed_x-5,displayed_y-5, 10, 10)
             painter.end()
             self.paint_mode = False
 
@@ -104,19 +97,16 @@ class MainApp(QMainWindow):
         self.current_point = [event.x(), event.y()]
         return super().mouseMoveEvent(event)
 
-    def clearMarkerEvent(self):
-        pass
-
     def submitEvent(self):
-        self.resetPosBtn.toggle()
-        pass
-
-    def resetInputEvent(self):
-        pass
+        self.showMinimized()
+        self.main_game_activated = main_game(pose_records=self.position_recorder.records, time_records=self.time_recorder.schedules)
 
     def resetPoseEvent(self):
-
-        pass
+        self.position_recorder.reset()
+        self.displayed_points = [] 
+        self.n_paints = 0 
+        self.count_label.setText(f"Mouse Action :{self.n_paints}")
+        self.update()
 
 class ControlInputDialog(QDialog):
     def __init__(self,
