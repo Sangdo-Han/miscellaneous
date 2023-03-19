@@ -35,18 +35,19 @@ def main_game( pose_records,
                time_records ):
 
     target_time, second_delay, mili_delay, loop_delay = time_records
+    loop_delay = loop_delay if loop_delay <= 1e-5 else 1e-5
     second_delay = second_delay
-    mili_delay = int(mili_delay * 100000)
+    mili_delay = int(mili_delay * 1000)
     loop_flag = True
 
     while loop_flag:
-        time.sleep(loop_delay)
         nowtime = datetime.datetime.now()
         if nowtime.hour==(target_time//100) and nowtime.minute >= target_time%100 and \
                                                 nowtime.second >= second_delay and \
                                                 nowtime.microsecond >= mili_delay:    
             for x_point, y_point in pose_records:
                 pyautogui.click(x_point,y_point)
+                time.sleep(loop_delay)
             loop_flag = False
         else:
             print(nowtime, end='\r')
