@@ -1,3 +1,7 @@
 *.h5
 *.pt
 *.ckpt
+*.gguf
+*.log
+*.sqlite3
+*.vscode/
