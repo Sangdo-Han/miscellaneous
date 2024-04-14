@@ -2,23 +2,30 @@ import argparse
 from typing import Optional, List
 
 import chromadb
-from chromadb import Collection, EmbeddingFunction
-from langchain_community.document_loaders.web_base import WebBaseLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from chromadb import (Collection,
+                      EmbeddingFunction)
 from chromadb.utils import embedding_functions
 
-#################
-### CONSTANTS ###
-#################
-MAX_INDEX_DIGITS = 5
-EMBEDDING_FUNCTION = embedding_functions.SentenceTransformerEmbeddingFunction(
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders.web_base import WebBaseLoader
+
+########################################################
+### CONSTANTS ##########################################
+## These will be controlled with config in the future ##
+########################################################
+MAX_INDEX_DIGITS : int = 5
+CHUNK_SIZE : int = 250
+CHUNK_OVERLAP : int = 0
+EMBEDDING_FUNCTION = embedding_functions.\
+    SentenceTransformerEmbeddingFunction(
     model_name="all-MiniLM-L6-v2"
-) # This needs to be same as in the main : RAG
+) # Embedding function needs to be same as in the service main : easy_rag.py
+########################################################
 
 def add_web_doc(collection:Collection,
             web_docs:List[str],
-            chunk_size : int = 250,
-            chunk_overlap : int = 50,
+            chunk_size : int = CHUNK_SIZE,
+            chunk_overlap : int = CHUNK_OVERLAP,
             idx_offset : int = 0) -> None:
 
     loader = WebBaseLoader(web_path=web_docs)
@@ -52,29 +59,32 @@ def get_collection(host:str,
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--host", type=str, default="localhost"
+        "--chromadb", type=str, default="localhost:8000"
     )
     parser.add_argument(
-        "--port", "-p", type=int, default=8000
+        "--collection-name", type=str, default="wiki"
     )
     parser.add_argument(
-        "--collection-name", "-n", type=str, default="wiki"
-    )
-    parser.add_argument(
-        "--web-path", "-w", type=str, nargs="*", \
+        "--doc-url", type=str, nargs="*", \
             default="https://sangdo-han.github.io/docs/research/llm/rag.html"
     )
-
     args = parser.parse_args()
 
-    collection = get_collection(host=args.host,
-                                port=args.port,
+    if ":" not in args.chromadb:
+        print("Use default chromadb port: 8000")
+        host = args.chromadb
+        port = 8000
+    else:
+        host, port = args.chromadb.split(":")
+        port = int(port)
+
+    collection = get_collection(host=host,
+                                port=port,
                                 collection_name=args.collection_name,
                                 embedding_function=EMBEDDING_FUNCTION)
     
-    assert args.web_path, ValueError("Needs at least one web url")
     add_web_doc(
         collection=collection,
-        web_docs=args.web_path,
+        web_docs=args.doc_url,
         idx_offset=collection.count()
     )

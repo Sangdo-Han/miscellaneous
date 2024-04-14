@@ -32,7 +32,7 @@ python vector_index.py --exec stop --port 8000
 
 ### 2. Webpage Document Ingestion
 ```sh
-python scripts/add_document.py --url {url-of-document} --chromadb localhost:8000
+python scripts/add_document.py --chromadb localhost:8000 --doc-url {url-of-document(s)} 
 ```
 
 ### 3. Chatbot Service with RAG
