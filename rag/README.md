@@ -38,8 +38,12 @@ python scripts/add_document.py --chromadb localhost:8000 --doc-url {url-of-docum
 ### 3. Chatbot Service with RAG
 
 ```bash
-python easy_rag.py --chat_host localhost:8080 --chromadb localhost:8000 --config ./config/service.yaml
+streamlit run easy_rag.py
 ```
+
+<p align="center">
+ <img src="rag_chat_example.png">
+</p>
 
 ## About License
 In this project, we will mainly use 4 open-sources : service-framework, llm, vectorstore and frontend.   
