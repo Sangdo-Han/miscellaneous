@@ -12,7 +12,7 @@ Serve chatbot with RAG in your local.
 
 ```bash
 git clone https://github.com/Sangdo-Han/research
-cd research/RAG
+cd research/llm/rag
 sh download_model.sh # llama-cpp pretrian
 conda create -n easyRAG python=3.10
 conda activate easyRAG
