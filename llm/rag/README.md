@@ -1,8 +1,32 @@
 # Easy RAG
 
-<p align="center">
- <img src="https://sangdo-han.github.io/docs/research/llm/rag_architecture.png">
-</p>
+
+```mermaid
+
+flowchart LR
+    %% Document Indexing Phase
+    subgraph Indexing Phase
+        A[Document Collection] --> B[Shared Encoder]
+        B --> C[Document Embeddings]
+        C --> D[Document Index]
+    end
+
+    %% Query Processing & Generation Phase
+    subgraph Query & Generation Phase
+        E[User Query] --> F[Shared Encoder]
+        F --> G[Query Embedding]
+        G --> H[Similarity Search in Index]
+        H --> I[Top-K Relevant Documents]
+        I --> J[Augmented Query]
+        J --> K[Large Language Model]
+        K --> L[Generated Response]
+    end
+
+
+    %% Connect the index from the indexing phase to the search
+    D -.-> H
+
+```
 
 Easy-RAG is a minimal architecture design for applying rag in llm chatbot.
 
