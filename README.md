@@ -1,4 +1,3 @@
-# Master repo of miscellaneous researches
+# miscellaneous codes
 
-This is the master repo of miscellaneous research / studies.  
 **The detailed information is in sub-directories.**
