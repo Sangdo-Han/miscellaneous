@@ -6,3 +6,13 @@
 *.sqlite3
 *.vscode/
 *vector_store/
+*.o
+*.out
+*.exe
+*.o.*
+*.out.*
+*.a
+*.dylib
+*.cmake
+*__pycache__*
+*.DS_Store
