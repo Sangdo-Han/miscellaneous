@@ -1,6 +1,5 @@
 import time
-from threading import Thread
-from named_lock import NamedLock
+from threading import Thread, Lock
 
 balance : int = 1000
 
@@ -25,7 +24,7 @@ class Consumer(Thread):
         print(f"{self.name} spend {spent} ")
 
 if "__main__" == __name__:
-    account = NamedLock("account")
+    account = Lock()
 
     threads = []
     for i in range(10):

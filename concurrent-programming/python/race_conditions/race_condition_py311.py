@@ -1,7 +1,6 @@
 import time
 import threading
 from threading import Lock
-from utils import Timer
 
 class UnsynchedBankAccount:
     def __init__(self, balance=0):

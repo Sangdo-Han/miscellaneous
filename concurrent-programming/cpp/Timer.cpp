@@ -4,7 +4,6 @@
 Timer::Timer()
     : m_Start(std::chrono::high_resolution_clock::now())
 {
-
 }
 Timer::~Timer()
 {

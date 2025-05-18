@@ -72,10 +72,7 @@ def test_atms(account: BankAccount, num_atms: int = 1000) -> None:
         atm.join()
 
 if "__main__" == __name__:
-    from utils import Timer
 
-
-    timer = Timer()
     num_atms: int = 1000
 
     account = UnsyncedBankAccount()
