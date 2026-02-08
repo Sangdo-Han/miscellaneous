@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RayTracingPCH.h"
 #ifndef SPHERE_H
 #define SPHERE_H
 
@@ -9,11 +10,16 @@
 class Sphere : public Hittable
 {
 public:
-    Sphere(const Point3& center, double radius)
-    : mCenter(center)
+    Sphere(
+        const Point3& mCenter,
+        double radius,
+        Material* mat
+    )
+    : mCenter(mCenter)
     , mRadius(std::fmax(0, radius))
-    {}
-
+    , mMat(mat)
+    {
+    }
     bool Hit(const Ray& r, Interval rayT, HitRecord& rec) const override
     {
         Vec3 oc = mCenter - r.GetOrigin();
@@ -41,6 +47,8 @@ public:
 
         rec.t = root;
         rec.p = r.At(rec.t);
+        rec.mat = mMat;
+
 
         Vec3 outwardNormal = (rec.p - mCenter) / mRadius;
         rec.SetFaceNormal(r, outwardNormal);
@@ -51,6 +59,7 @@ public:
 private:
     Point3 mCenter;
     double mRadius;
+    Material* mMat;
 };
 
 #endif

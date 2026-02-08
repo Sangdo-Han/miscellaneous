@@ -4,14 +4,33 @@
 #ifndef RAYTRACING_PCH_H
 #define RAYTRACING_PCH_H
 #include <cmath>
+#include <random>
 #include <iostream>
 #include <limits>
 #include <memory>
 
+#include "Constant.h"
+
+inline double DegreesToRadian(double degrees)
+{
+    return degrees * pi / 180.0;
+}
+inline double RandomDouble() // Use C++ Style Random Generator
+{
+    static std::uniform_real_distribution<double> distribution(0.0, 1.0);
+    static std::mt19937 generator;
+    return distribution(generator);
+}
+inline double RandomDouble(double min, double max)
+{
+    return min + (max - min) * RandomDouble();
+}
+
 #include "Color.h"
 #include "Ray.h"
 #include "Vec3.h"
-#include "Constant.h"
 #include "Interval.h"
+
+
 
 #endif

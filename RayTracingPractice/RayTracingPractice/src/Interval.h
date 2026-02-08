@@ -1,7 +1,8 @@
 #pragma once
+#include "RayTracingPCH.h"
 #ifndef INTERVAL_H
 #define INTERVAL_H
-#include "Constant.h"
+
 
 class Interval
 {
@@ -28,6 +29,14 @@ public:
     {
         return min < x && x < max;
     }
+    double Clamp(double x) const
+    {
+        if (x < min)
+            return min;
+        if (x >= max)
+            return max;
+    }
+
     static const Interval empty;
     static const Interval universe;
 

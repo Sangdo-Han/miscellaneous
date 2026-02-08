@@ -1,9 +1,9 @@
 #pragma once
 
+#include "RayTracingPCH.h"
 #ifndef HITTABLE_H
 #define HITTABLE_H
-#include "RayTracingPCH.h"
-#include "Ray.h"
+class Material;
 
 class HitRecord
 {
@@ -19,6 +19,7 @@ public:
 public:
     Point3 p;
     Vec3 normal;
+    Material* mat;
     double t;
     bool frontFace;
 };

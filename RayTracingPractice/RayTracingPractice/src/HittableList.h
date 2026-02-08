@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RayTracingPCH.h"
 #ifndef HITTABLE_LIST_H
 #define HITTABLE_LIST_H
 
@@ -24,11 +25,6 @@ public:
     }
     void Clear()
     {
-        // Unlike Raytracing in a Weekend, we assume that we are using stack, not heap.
-        // for (Hittable* ptr: objects)
-        // {
-        //     delete ptr;
-        // }
         objects.clear();
     }
     void Add(Hittable* object)

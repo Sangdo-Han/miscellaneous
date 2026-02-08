@@ -1,13 +1,21 @@
+
 #include "RayTracingPCH.h"
+
+#include "Camera.h"
 #include "Hittable.h"
 #include "HittableList.h"
 #include "Sphere.h"
+#include "Material.h"
 
 void Step1();
 void Step2();
 void Step3();
-void Step45(); // Step 4 and 5 in the RayTracing In One Weekend
-void Step6();
+void Step45(); // Step 4 and 5 : Adding Sphere
+
+// Step 6 - 11
+void Sandbox();
+
+void FinalRenderer();
 
 int main()
 {
@@ -15,7 +23,8 @@ int main()
     // Step2();
     // Step3();
     // Step45();
-    Step6();
+    // Sandbox();
+    FinalRenderer();
 }
 
 
@@ -23,17 +32,17 @@ void Step1() {
     // DAY 1 - Hello World in Image
     // Only requires <iostream>
     // Image
-    int imageWidth = 256;
-    int imageHeight = 256;
+    int mImageWidth = 256;
+    int mImageHeight = 256;
 
     // Render
-    std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";
+    std::cout << "P3\n" << mImageWidth << ' ' << mImageHeight << "\n255\n";
 
-    for (int j = 0; j < imageHeight; j++) {
-        std::clog << "\rScanlines remaining: " << (imageHeight - j) << ' ' << std::flush;
-        for (int i = 0; i < imageWidth; i++) {
-            auto r = double(i) / (imageWidth - 1);
-            auto g = double(j) / (imageHeight - 1);
+    for (int j = 0; j < mImageHeight; j++) {
+        std::clog << "\rScanlines remaining: " << (mImageHeight - j) << ' ' << std::flush;
+        for (int i = 0; i < mImageWidth; i++) {
+            auto r = double(i) / (mImageWidth - 1);
+            auto g = double(j) / (mImageHeight - 1);
             auto b = 0.0;
 
             int ir = int(255.999 * r);
@@ -53,19 +62,19 @@ void Step2()
     // Requires Vec3.h
     // Requires Color.h
 
-    int imageHeight = 256;
-    int imageWidth = 256;
+    int mImageHeight = 256;
+    int mImageWidth = 256;
 
     // Render HW
 
-    std::cout << "P3\n" << imageHeight << ' ' << imageHeight << "\n255\n";
+    std::cout << "P3\n" << mImageHeight << ' ' << mImageHeight << "\n255\n";
 
-    for (int j = 0; j < imageHeight; j++)
+    for (int j = 0; j < mImageHeight; j++)
     {
-        std::clog << "\rScanlines remaining: " << (imageHeight - j) << ' ' << std::flush;
-        for (int i = 0; i < imageWidth; i++)
+        std::clog << "\rScanlines remaining: " << (mImageHeight - j) << ' ' << std::flush;
+        for (int i = 0; i < mImageWidth; i++)
         {
-            Color PixelColor = Color(double(i) / (imageWidth - 1), double(j) / (imageHeight - 1), 0);
+            Color PixelColor = Color(double(i) / (mImageWidth - 1), double(j) / (mImageHeight - 1), 0);
             WriteColor(std::cout, PixelColor);
         }
     }
@@ -75,20 +84,20 @@ void Step2()
 void Step3()
 {
     double aspect_ratio = 16.0 / 9.0;
-    int imageWidth = 400;
+    int mImageWidth = 400;
 
-    int imageHeight = int(imageWidth / aspect_ratio);
-    imageHeight = (imageHeight < 1) ? 1 : imageHeight;
+    int mImageHeight = int(mImageWidth / aspect_ratio);
+    mImageHeight = (mImageHeight < 1) ? 1 : mImageHeight;
 
     double viewportHeight = 2.0;
-    double viewportWidth = viewportHeight * ((double)imageWidth / imageHeight);
+    double viewportWidth = viewportHeight * ((double)mImageWidth / mImageHeight);
 
 }
 
 
-bool HitSphereStep45(const Point3& center, double radius, const Ray& ray)
+bool HitSphereStep45(const Point3& mCenter, double radius, const Ray& ray)
 {
-    Vec3 oc = center - ray.GetOrigin();
+    Vec3 oc = mCenter - ray.GetOrigin();
     double a = Dot(ray.GetDirection(), ray.GetDirection());
     double b = -2.0 * Dot(ray.GetDirection(), oc);
     double c = Dot(oc, oc) - radius * radius;
@@ -111,15 +120,15 @@ void Step45()
 {
 
     
-    double aspectRatio = 16.0 / 9.0;
-    int imageWidth = 400;
-    int imageHeight = int(imageWidth / aspectRatio);
+    double mAspectRatio = 16.0 / 9.0;
+    int mImageWidth = 400;
+    int mImageHeight = int(mImageWidth / mAspectRatio);
 
-    imageHeight = (imageHeight < 1) ? 1 : imageHeight;
+    mImageHeight = (mImageHeight < 1) ? 1 : mImageHeight;
 
     double focalLength = 1.0;
     double viewportHeight = 2.0;
-    double viewportWidth = viewportHeight * ((double) imageWidth / imageHeight);
+    double viewportWidth = viewportHeight * ((double) mImageWidth / mImageHeight);
     Vec3 cameraCenter = Point3(0,0,0);
 
     // Calculate the vectors across the horizontal and down the vertical viewport edges
@@ -129,23 +138,23 @@ void Step45()
 
 
     // Calculate the horizontal and verticla delta vectors from pixel to pixel
-    Vec3 pixelDeltaU = viewportU / imageWidth;
-    Vec3 pixelDeltaV = viewportV / imageHeight;
+    Vec3 mPixelDeltaU = viewportU / mImageWidth;
+    Vec3 mPixelDeltaV = viewportV / mImageHeight;
 
     // Calculate the location of the upper left pixel 
     Vec3 viewportUpperLeft = cameraCenter - Vec3(0, 0, focalLength) - viewportU / 2 - viewportV / 2;
-    Vec3 pixel00Loc = viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV);
+    Vec3 mPixel00Loc = viewportUpperLeft + 0.5 * (mPixelDeltaU + mPixelDeltaV);
 
     // Render
 
-    std::cout << "P3\n" << imageWidth << " " << imageHeight << "\n255\n";
+    std::cout << "P3\n" << mImageWidth << " " << mImageHeight << "\n255\n";
 
-    for (int j = 0; j < imageHeight; j++)
+    for (int j = 0; j < mImageHeight; j++)
     {
-        std::clog << "\rScanlines remaining: " << (imageHeight - j) << ' ' << std::flush;
-        for (int i = 0; i < imageWidth; i++)
+        std::clog << "\rScanlines remaining: " << (mImageHeight - j) << ' ' << std::flush;
+        for (int i = 0; i < mImageWidth; i++)
         {
-            Vec3 pixelCenter = pixel00Loc + (i * pixelDeltaU) + (j * pixelDeltaV);
+            Vec3 pixelCenter = mPixel00Loc + (i * mPixelDeltaU) + (j * mPixelDeltaV);
             Vec3 rayDirection = pixelCenter - cameraCenter;
             Ray r(cameraCenter, rayDirection);
 
@@ -161,101 +170,128 @@ void Step45()
 }
 
 
-double HitSphereStep6(const Point3& center, double radius, const Ray& ray)
+void Sandbox()
 {
-    Vec3 oc = center - ray.GetOrigin();
-    double a = ray.GetDirection().GetSquaredLength();
-    double h = Dot(ray.GetDirection(), oc);
-    double c = oc.GetSquaredLength() - radius * radius;
-    double discriminant = h * h - a * c;
-
-    if (discriminant < 0)
-    {
-        return -1.0;
-    }
-    else
-    {
-        return (h - std::sqrt(discriminant)) / a;
-    }
-}
-
-Color RayColorStep6(const Ray& r, const Hittable& world)
-{
-    HitRecord rec;
-    if (world.Hit(r, Interval(0, infinity), rec))
-    {
-        return 0.5 * (rec.normal + Color(1, 1, 1));
-    }
-
-    Vec3 unitDirection = UnitVector(r.GetDirection());
-    double a = 0.5 * (unitDirection.Y() + 1.0);
-    return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);
-
-}
-
-void Step6()
-{
-
-    // Image
-    double aspectRatio = 16.0 / 9.0;
-    int imageWidth = 400;
-
-    // Calculate the image height, and ensure that it's at least 1.
-    int imageHeight = int(imageWidth / aspectRatio);
-    imageHeight = (imageHeight < 1) ? 1 : imageHeight;
 
     // World
     HittableList world;
 
-    // I will use stack allocation.
-    Sphere ball1 = Sphere(Point3(0,0, -1), 0.5);
-    Sphere ball2 = Sphere(Point3(0, -100.5, -1), 100);
-
-    world.Add(&ball1);
-    world.Add(&ball2);
-
-
-    // Camera
-    double focalLength = 1.0;
-    double viewportHeight = 2.0;
-    double viewportWidth = viewportHeight * ((double) imageWidth / imageHeight);
-    Vec3 cameraCenter = Point3(0,0,0);
-
-    // Calculate the vectors across the horizontal and down the vertical viewport edges
-
-    Vec3 viewportU = Vec3(viewportWidth, 0, 0);
-    Vec3 viewportV = Vec3(0, -viewportHeight, 0);
+    // Material
+    Lambertian materialGround = Lambertian(Color(0.8, 0.8, 0.0));
+    Lambertian materialCenter = Lambertian(Color(0.1, 0.2, 0.5));
+    Metal materialRight = Metal(Color(0.8, 0.8, 0.8), 0.5);
+    Dielectric materialLeft = Dielectric(1.5);
+    Dielectric materialBubble = Dielectric(1 / 1.5);
 
 
-    // Calculate the horizontal and verticla delta vectors from pixel to pixel
-    Vec3 pixelDeltaU = viewportU / imageWidth;
-    Vec3 pixelDeltaV = viewportV / imageHeight;
+    // Stack allocations.
+    Sphere ground = Sphere(Point3(0, -100.5, -1), 100, &materialGround);
+    Sphere ballCenter = Sphere(Point3(0.0, 0.0, -1.2), 0.5, &materialCenter);
+    Sphere ballRight = Sphere(Point3(1.0, 0.0, -1.0), 0.5, &materialRight);
+    Sphere ballLeft = Sphere(Point3(-1.0, 0.0, -1.0), 0.5, &materialLeft);
+    Sphere ballBubble = Sphere(Point3(-1.0, 0.0, -1.0), 0.45, &materialBubble);
 
-    // Calculate the location of the upper left pixel 
-    Vec3 viewportUpperLeft = cameraCenter - Vec3(0, 0, focalLength) - viewportU / 2 - viewportV / 2;
-    Vec3 pixel00Loc = viewportUpperLeft + 0.5 * (pixelDeltaU + pixelDeltaV);
+    world.Add(&ground);
+    world.Add(&ballCenter);
+    world.Add(&ballRight);
+    world.Add(&ballLeft);
+    world.Add(&ballBubble);
 
-    // Render
 
-    std::cout << "P3\n" << imageWidth << " " << imageHeight << "\n255\n";
+    Camera cam(
+        400,
+        16.0/9.0,
+        100,
+        50,
+        20
+    );
 
-    for (int j = 0; j < imageHeight; j++)
+    cam.LookFrom = Point3(-2, 2, 1);
+    cam.LookAt = Point3(0, 0, -1);
+    cam.VUp = Vec3(0, 1, 0);
+
+    cam.defocusAngle = 10.0;
+    cam.focusDist = 3.4;
+
+    cam.Render(world);
+
+}
+
+void FinalRenderer()
+{
+    // World
+    HittableList world;
+    std::vector<Sphere> sphereStorage;
+    sphereStorage.reserve(500);
+
+
+    Lambertian groundMaterial = Lambertian(Color(0.5, 0.5, 0.5));
+    Sphere ground = Sphere(Point3(0, -1000, 0), 1000, &groundMaterial);
+    world.Add(&ground);
+
+    for (int a = -11; a < 11; a++)
     {
-        std::clog << "\rScanlines remaining: " << (imageHeight - j) << ' ' << std::flush;
-        for (int i = 0; i < imageWidth; i++)
+        for (int b=-11; b< 11; b++)
         {
-            Vec3 pixelCenter = pixel00Loc + (i * pixelDeltaU) + (j * pixelDeltaV);
-            Vec3 rayDirection = pixelCenter - cameraCenter;
-            Ray r(cameraCenter, rayDirection);
+            double chooseMat = RandomDouble();
+            Point3 center(
+                a + 0.9 * RandomDouble(),
+                0.2,
+                b + 0.9 * RandomDouble()
+            );
 
-            Color pixelColor = RayColorStep6(r, world);
+            if ((center - Point3(4, 0.2, 0)).Getlength() > 0.9)
+            {
+                if (chooseMat < 0.8)
+                {
+                    Color albedo = Color::Random() * Color::Random();
+                    Lambertian* sphereMaterial = new Lambertian(albedo);
+                    Sphere sphere = Sphere(center, 0.2, sphereMaterial);
+                    sphereStorage.push_back(sphere);
+                    world.Add(&sphereStorage.back());
+                }
+                else if (chooseMat < 0.95)
+                {
+                    //Metal
+                    Color albedo = Color::Random(0.5, 1);
+                    auto fuzz = RandomDouble(0, 0.5);
+                    Metal* sphereMaterial = new Metal(albedo, fuzz);
+                    Sphere sphere = Sphere(center, 0.2, sphereMaterial);
+                    sphereStorage.push_back(sphere);
+                    world.Add(&sphereStorage.back());
+                }
+                else
+                {
+                    Dielectric* sphereMaterial = new Dielectric(1.5);
+                    Sphere sphere = Sphere(center, 0.2, sphereMaterial);
+                    sphereStorage.push_back(sphere);
+                    world.Add(&sphereStorage.back());
+                }
+            }
 
-            WriteColor(std::cout, pixelColor);
-
-        }
+        }   
 
     }
 
-    std::clog << "\rDone.              \n";
+    Dielectric material1 = Dielectric(1.5);
+    Sphere sphere1 = Sphere(Point3(0, 1, 0), 1.0, &material1);
+    world.Add(&sphere1);
 
+    Lambertian material2 = Lambertian(Color(0.4, 0.2, 0.1));
+    Sphere sphere2 = Sphere(Point3(-4, 1, 0), 1.0, &material2);
+    world.Add(&sphere2);
+
+    Metal material3 = Metal(Color(0.7, 0.6, 0.5), 0.0);
+    Sphere sphere3 = Sphere(Point3(4, 1, 0), 1.0, &material3);
+    world.Add(&sphere3);
+
+    Camera cam(1200, 16.0 / 9.0, 400, 40, 20);
+    cam.LookFrom = Point3(13, 2, 3);
+    cam.LookAt = Point3(0, 0, 0);
+    cam.VUp = Vec3(0, 1, 0);
+
+    cam.defocusAngle = 0.6;
+    cam.focusDist = 10.0;
+
+    cam.Render(world);
 }
