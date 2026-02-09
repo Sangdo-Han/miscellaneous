@@ -1,8 +1,0 @@
-langchain
-langchain-community
-langchainhub
-chromadb
-bs4
-llama-cpp-python
-sentence-transformers
-streamlit
