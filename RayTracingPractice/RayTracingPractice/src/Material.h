@@ -1,7 +1,13 @@
 #pragma once
-#include "RayTracingPCH.h"
 #ifndef MATERIAL_H
 #define MATERIAL_H
+
+#include <cstddef>
+#include <new>
+#include <cassert>
+#include <type_traits>
+
+#include "RayTracingPCH.h"
 #include "Hittable.h"
 
 class Material
@@ -120,4 +126,43 @@ private:
 	// the refractive inde3x of the enclosing media
 	double mRefractionIndex;
 };
+
+class MaterialArena
+{
+public:
+	MaterialArena()
+		: mOffset(0)
+	{
+	}
+
+	template<typename T, typename... Args>
+	T* Create(Args&&... args)
+	{
+		static_assert(std::is_base_of_v<Material, T>,
+			"Type must derive from Material");
+		constexpr size_t align = alignof(T);
+		size_t alignedOffset = (mOffset + align - 1) & ~(align - 1);
+
+		assert(alignedOffset + sizeof(T) <= sizeof(mBuffer) && "MaterialArena Buffer overflow");
+
+		void* mem = mBuffer + alignedOffset;
+		mOffset = alignedOffset + sizeof(T);
+
+		return new (mem) T(std::forward<Args>(args)...);
+	}
+
+	void Reset()
+	{
+		mOffset = 0;
+	}
+
+public:
+	static constexpr size_t MaxMaterials = 1024;
+	static constexpr size_t MaxMaterialSize = 64;
+private:
+	alignas(std::max_align_t) std::byte mBuffer[MaxMaterials * MaxMaterialSize];
+	size_t mOffset;
+
+};
+
 #endif
