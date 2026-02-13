@@ -220,9 +220,7 @@ void FinalRenderer()
 
 int main()
 {
-    //FinalRenderer();
     Timer t("SandBox");
-    //Sandbox();
     FinalRendererFixed();
 
 }

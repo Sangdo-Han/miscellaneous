@@ -131,6 +131,7 @@
     <ClInclude Include="src\Color.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Constant.h" />
+    <ClInclude Include="src\Timer.h" />
     <ClInclude Include="src\Hittable.h" />
     <ClInclude Include="src\HittableList.h" />
     <ClInclude Include="src\Interval.h" />
