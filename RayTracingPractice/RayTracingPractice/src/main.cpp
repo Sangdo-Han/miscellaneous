@@ -126,7 +126,7 @@ void FinalRendererFixed()
     Sphere sphere3 = Sphere(Point3(4, 1, 0), 1.0, &material3);
     world.Add(&sphere3);
 
-    Camera cam(1200, 16.0 / 9.0, 400, 40, 20);
+    Camera cam(300, 16.0 / 9.0, 400, 40, 20);
     cam.LookFrom = Point3(13, 2, 3);
     cam.LookAt = Point3(0, 0, 0);
     cam.VUp = Vec3(0, 1, 0);
