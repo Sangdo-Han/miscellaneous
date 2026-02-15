@@ -21,6 +21,12 @@
     <ClCompile Include="src\Material.h">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ImageLoader.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stbImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vec3.h">
@@ -54,6 +60,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BVH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

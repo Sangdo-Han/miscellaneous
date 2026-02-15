@@ -17,6 +17,11 @@ public:
     , max(max)
     {
     }
+    Interval(const Interval& a, const Interval& b)
+    {
+        min = a.min < b.min ? a.min : b.min;
+        max = a.max > b.max ? a.max : b.max;
+    }
     double Size() const
     {
         return max - min;
@@ -37,7 +42,11 @@ public:
             return max;
         return x;
     }
-
+    Interval expand(double delta) const
+    {
+        auto padding = delta / 2;
+        return Interval(min - padding, max + padding);
+    }
     static const Interval empty;
     static const Interval universe;
 
@@ -46,4 +55,6 @@ public:
     double max;
 };
 
+inline const Interval Interval::empty = Interval(+infinity, -infinity);
+inline const Interval Interval::universe = Interval(-infinity, +infinity);
 #endif

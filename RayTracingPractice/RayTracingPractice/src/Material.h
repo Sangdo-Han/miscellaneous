@@ -9,6 +9,7 @@
 
 #include "RayTracingPCH.h"
 #include "Hittable.h"
+#include "Texture.h"
 
 class Material
 {
@@ -29,8 +30,25 @@ class Lambertian : public Material
 {
 public:
 	Lambertian(const Color& albedo)
-		:mAlbedo(albedo)
 	{
+		mTexture = new SolidColor(albedo);
+		mTextureOwnership = true;
+	}
+	Lambertian(Texture* tex)
+		: mTexture(tex)
+		, mTextureOwnership(false)
+	{
+	}
+	Lambertian(const Lambertian&) = delete;
+	Lambertian& operator=(const Lambertian&) = delete;
+	virtual ~Lambertian()
+	{
+		if (mTextureOwnership && mTexture != nullptr)
+		{
+			delete mTexture;
+			mTexture = nullptr;
+			mTextureOwnership = false;
+		}
 	}
 	bool Scatter(
 		const Ray& rIn,
@@ -46,13 +64,14 @@ public:
 		if (scatterDirection.IsNearZero())
 			scatterDirection = rec.normal;
 
-		scattered = Ray(rec.p, scatterDirection);
-		attenuation = mAlbedo;
+		scattered = Ray(rec.p, scatterDirection, rIn.GetTime());
+		attenuation = mTexture->Value(rec.u, rec.v, rec.p);
 		return true;
 	}
 
 private:
-	Color mAlbedo;
+	Texture* mTexture = nullptr;
+	bool mTextureOwnership = false;
 };
 
 class Metal : public Material
@@ -72,7 +91,7 @@ public:
 		Vec3 reflected = Reflect(rIn.GetDirection(), rec.normal);
 		
 		reflected = UnitVector(reflected) + (mFuzz * RandomUnitVector());
-		scattered = Ray(rec.p, reflected);
+		scattered = Ray(rec.p, reflected, rIn.GetTime());
 		attenuation = mAlbedo;
 		return true;
 	}
@@ -110,7 +129,7 @@ public:
 		else
 			direction = Refract(unitDirection, rec.normal, ri);
 
-		scattered = Ray(rec.p, direction);
+		scattered = Ray(rec.p, direction, rIn.GetTime());
 		return true;
 	}
 private:

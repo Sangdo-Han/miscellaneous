@@ -1,3 +1,6 @@
 C:\Users\aiuan\source\repos\miscellaneous\RayTracingPractice\RayTracingPractice\x64\Debug\RayTracingPractice.vcxproj.MdMergeInputs.cache
 C:\Users\aiuan\source\repos\miscellaneous\RayTracingPractice\RayTracingPractice\x64\Debug\RayTracingPractice.vcxproj.cppwinrt_plat.cache
 C:\Users\aiuan\source\repos\miscellaneous\RayTracingPractice\RayTracingPractice\x64\Debug\RayTracingPractice.vcxproj.cppwinrt_comp.cache
+C:\GitRepos\Miscellaneous\RayTracingPractice\RayTracingPractice\x64\Debug\RayTracingPractice.vcxproj.MdMergeInputs.cache
+C:\GitRepos\Miscellaneous\RayTracingPractice\RayTracingPractice\x64\Debug\RayTracingPractice.vcxproj.cppwinrt_plat.cache
+C:\GitRepos\Miscellaneous\RayTracingPractice\RayTracingPractice\x64\Debug\RayTracingPractice.vcxproj.cppwinrt_comp.cache

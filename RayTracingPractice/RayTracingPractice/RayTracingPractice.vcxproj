@@ -126,11 +126,16 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Material.h" />
+    <ClCompile Include="src\ImageLoader.h" />
+    <ClCompile Include="src\stbImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\external\stb_image.h" />
+    <ClInclude Include="src\BVH.h" />
     <ClInclude Include="src\Color.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Constant.h" />
+    <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Timer.h" />
     <ClInclude Include="src\Hittable.h" />
     <ClInclude Include="src\HittableList.h" />

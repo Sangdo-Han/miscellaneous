@@ -5,7 +5,7 @@
 #define HITTABLE_LIST_H
 
 #include <vector>
-
+#include "AABB.h"
 #include "Hittable.h"
 
 class HittableList: public Hittable
@@ -30,6 +30,7 @@ public:
     void Add(Hittable* object)
     {
         objects.push_back(object);
+        mBbox = AABB(mBbox, object->BoundingBox());
     }
     bool Hit(const Ray& r, Interval rayT, HitRecord& rec) const override
     {
@@ -49,8 +50,10 @@ public:
         return bHitAnything;
 
     }
+    AABB BoundingBox() const override { return mBbox; }
 public:
     std::vector<Hittable*> objects;
+    AABB mBbox;
 };
 
 #endif

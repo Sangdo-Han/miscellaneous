@@ -82,7 +82,7 @@ private:
 
 		mPixel00Loc = viewportUpperLeft + 0.5 * (mPixelDeltaU + mPixelDeltaV);
 
-		double defocusRadius = focusDist * std::tan(DegreesToRadian(defocusAngle / 2 ));
+		double defocusRadius = focusDist * std::tan(DegreesToRadian(DefocusAngle / 2 ));
 		defocusDiskU = u * defocusRadius;
 		defocusDiskV = v * defocusRadius;
 
@@ -97,10 +97,13 @@ private:
 						+ ((i + offset.X()) * mPixelDeltaU)
 						+ ((j + offset.Y()) * mPixelDeltaV);
 		
-		Point3 rayOrigin = (defocusAngle <= 0) ? mCenter : defocusDiskSample();
+		Point3 rayOrigin = (DefocusAngle <= 0) ? mCenter : defocusDiskSample();
 		Point3 rayDirection = pixelSample - rayOrigin;
 
-		return Ray(rayOrigin, rayDirection);
+		double rayTime = RandomDouble();
+
+
+		return Ray(rayOrigin, rayDirection, rayTime);
 	}
 	Point3 defocusDiskSample() const
 	{
@@ -132,7 +135,7 @@ private:
 
 		Vec3 unitDirection = UnitVector(r.GetDirection());
 		double a = 0.5 * (unitDirection.Y() + 1.0);
-		return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);
+		return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.8, 0.35, 0.9);
 	}
 
 public:
@@ -140,7 +143,7 @@ public:
 	Point3 LookAt = Point3(0, 0, -1);
 	Vec3 VUp = Vec3(0, 1, 0);
 
-	double defocusAngle = 0; // Variation angle of rays through each pixel
+	double DefocusAngle = 0; // Variation angle of rays through each pixel
 	double focusDist = 10; // Distance from camera LookFrom point to plane of perfect focus
 
 private:

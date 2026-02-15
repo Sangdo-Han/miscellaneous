@@ -25,12 +25,13 @@ inline double RandomDouble(double min, double max)
 {
     return min + (max - min) * RandomDouble();
 }
-
+inline double RandomInt(int min, int max)
+{
+    return int(RandomDouble(min, max + 1));
+}
 #include "Color.h"
 #include "Ray.h"
 #include "Vec3.h"
 #include "Interval.h"
-
-
 
 #endif
