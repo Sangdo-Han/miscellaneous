@@ -65,15 +65,14 @@ public:
         
         Vec3 outwardNormal = (rec.p - currentCenter) / mRadius;
         rec.SetFaceNormal(r, outwardNormal);
-        getSphereUV(outwardNormal, rec.u, rec.v);
+        GetSphereUV(outwardNormal, rec.u, rec.v);
         rec.mat = mMat;
 
         return true;
     }
     AABB BoundingBox() const override { return mBbox; }
 
-private:
-    static void getSphereUV(const Point3& p, double& u, double& v)
+    static void GetSphereUV(const Point3& p, double& u, double& v)
     {
         // p: a given point on the sphere of radius one, centered at the origin.
         // u: returned value [0,1] of angle around the Y axis from X=-1.

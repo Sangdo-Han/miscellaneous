@@ -5,7 +5,8 @@
 #define CAMERA_H
 #include "Hittable.h"
 #include "Material.h"
-
+#include "Texture.h"
+#include "Sphere.h"
 
 class Camera
 {
@@ -134,10 +135,19 @@ private:
 		}
 
 		Vec3 unitDirection = UnitVector(r.GetDirection());
+		if (mBackground != nullptr)
+		{
+			double u;
+			double v;
+
+			Sphere::GetSphereUV(unitDirection, u, v);
+			return mBackground->Value(u, v, unitDirection);
+
+			
+		}
 		double a = 0.5 * (unitDirection.Y() + 1.0);
 		return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.8, 0.35, 0.9);
 	}
-
 public:
 	Point3 LookFrom = Point3(0, 0, 0);
 	Point3 LookAt = Point3(0, 0, -1);
@@ -175,6 +185,8 @@ private:
 
 	Vec3 defocusDiskU; // Defocus Disk horizontal radius
 	Vec3 defocusDiskV; // Defocus Disk vertical radius
+
+	ImageTexture* mBackground = new ImageTexture("purplesky.jpg");
 };
 
 #endif

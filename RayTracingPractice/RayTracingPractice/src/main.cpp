@@ -137,14 +137,21 @@ void Earth()
 
 }
 
-int main(int arg=1)
+int main(int argc, char* argv[])
 {
     Timer t("SandBox");
-    switch (3)
+    int caseNum = 1;
+
+    if (argc > 1)
+    {
+        caseNum = std::atoi(argv[1]);
+    }
+
+    switch (caseNum)
     {
         case 1: BouncingSphere(); break;
         case 2: CheckerSpheres(); break;
         case 3: Earth(); break;
-        default: BouncingSphere();
+        default: BouncingSphere(); break;
     }
 }
